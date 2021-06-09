@@ -12,25 +12,14 @@ namespace NcavScreener.Test
         {
             // Arrange
             testFixture = fixture;
-            parser = new Parser(testFixture.Source);
+            parser = new Parser();
         }
 
         [Fact]
-        public void ExtractPageLinks()
+        public void ExtractCrumb()
         {
-            // Act
-            var pageLinks = parser.ExtractPageLinks();
-            // Assert
-            Assert.True(pageLinks.Count == 9);
-        }
-
-        [Fact]
-        public void ExtractStockLinks()
-        {
-            // Act
-            var stockLinks = parser.ExtractStockLinks();
-            // Assert
-            Assert.True(stockLinks.Count == 10);
+            var crumb = parser.ExtractCrumb(testFixture.ScreenerSource);
+            Assert.Equal("IpknhJuL/hh", crumb);
         }
     }
 }
