@@ -25,15 +25,15 @@ namespace NcavScreener.Test
         [Fact]
         public void GetNcavInvalid()
         {
-            var ncav = parser.GetNcav(testFixture.NullBalanceSheet);
+            var ncav = parser.GetNcav(testFixture.NullBalanceSheet, "MSN");
             Assert.Equal(double.NaN, ncav);
         }
 
         [Fact]
         public void GetNcav()
         {
-            var ncav = parser.GetNcav(testFixture.BalanceSheet);
-            Assert.Equal(8.82d, ncav);
+            var ncav = parser.GetNcav(testFixture.BalanceSheet, "MSN");
+            Assert.Equal(1.61d, ncav);
         }
     }
 }
