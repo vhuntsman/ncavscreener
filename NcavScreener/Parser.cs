@@ -23,7 +23,7 @@ namespace NcavScreener
         public double GetNcav(string context)
         {
             double result = double.NaN;
-            Regex re = new Regex(@"title=""Total current assets"".*?<\/div><div class.*?<\/div><\/div><div class.*?><span.*?>(.*?)<\/span>.*?title=""Total liabilities"".*?<\/div><div class.*?<\/div><\/div><div class.*?><span.*?>(.*?)<\/span>.*?title=""Common stock"".*?<\/div><div class.*?<\/div><\/div><div class.*?><span.*?>(.*?)<\/span>", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+            Regex re = new Regex(@"title=""Total current assets"".*?<\/div><div class.*?<\/div><\/div><div class.*?><span.*?>(.*?)<\/span>.*?title=""Total liabilities"".*?<\/div><div class.*?<\/div><\/div><div class.*?><span.*?>(.*?)<\/span>.*?title=""Common stock"".*?<\/div><div class.*?<\/div><\/div><div class.*?><span.*?>(.*?)<\/span>", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline, TimeSpan.FromSeconds(2));
             var matches = re.Matches(context);
             try
             {
