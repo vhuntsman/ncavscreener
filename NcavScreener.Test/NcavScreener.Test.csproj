@@ -24,6 +24,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="BalanceSheet.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="NullBalanceSheet.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="SampleSource.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

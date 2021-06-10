@@ -9,11 +9,15 @@ namespace NcavScreener.Test
     public class SampleFixture : IDisposable
     {
         public string ScreenerSource { get; }
+        public string BalanceSheet { get; }
+        public string NullBalanceSheet { get; }
 
         public SampleFixture()
         {
             // ... initialize data in the test database ...
             ScreenerSource = File.ReadAllText("ScreenerSource.html");
+            BalanceSheet = File.ReadAllText("BalanceSheet.html");
+            NullBalanceSheet = File.ReadAllText("NullBalanceSheet.html");
         }
 
         public void Dispose()
