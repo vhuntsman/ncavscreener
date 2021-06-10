@@ -64,6 +64,10 @@ namespace NcavScreener
             {
                 // Get the symbol 
                 string ticker = quote["symbol"].Value;
+                if (ticker == "MSN")
+                {
+                    Console.WriteLine("MSN!");
+                }
                 var balanceSheetClient = new RestClient("https://sg.finance.yahoo.com/quote/" + ticker + "/balance-sheet?p=" + ticker);
                 balanceSheetClient.Timeout = -1;
                 var balanceSheetRequest = new RestRequest(Method.GET);
@@ -75,9 +79,9 @@ namespace NcavScreener
                 var fullExchangeName = quote["fullExchangeName"];
                 if (!double.IsNaN(ncav) && (ncav > 0.0d))
                 {
-                    if (ncav < price)
+                    if (price < ncav)
                     {
-                        Console.WriteLine(String.Format("{0,5} | {1, 8} | {2, 8} | {3, 30} | {4, 20}", ticker, ncav, price, longName, fullExchangeName));
+                        Console.WriteLine(String.Format("{0,5} | {1, 8} | {2, 8} | {3, 30} | {4, 20}", ticker, price, ncav, longName, fullExchangeName));
                         // Console.WriteLine(ticker + "\t" + ncav + "\t" + string.Format("{0, 7}", price) + "\t\t" + longName + "\t" + fullExchangeName);
                     }
                 }
