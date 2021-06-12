@@ -5,34 +5,34 @@ namespace NcavScreener.Test
     [Collection("Sample source collection")]
     public class ParserTest
     {
-        SampleFixture testFixture;
-        Parser parser;
+        private SampleFixture _testFixture;
+        private Parser _parser;
 
         public ParserTest(SampleFixture fixture)
         {
             // Arrange
-            testFixture = fixture;
-            parser = new Parser();
+            _testFixture = fixture;
+            _parser = new Parser();
         }
 
         [Fact]
         public void ExtractCrumb()
         {
-            var crumb = parser.ExtractCrumb(testFixture.ScreenerSource);
+            var crumb = _parser.ExtractCrumb(_testFixture.ScreenerSource);
             Assert.Equal("IpknhJuL/hh", crumb);
         }
 
         [Fact]
         public void GetNcavInvalid()
         {
-            var ncav = parser.GetNcav(testFixture.NullBalanceSheet, "MSN");
+            var ncav = _parser.GetNcav(_testFixture.NullBalanceSheet, "MSN");
             Assert.Equal(double.NaN, ncav);
         }
 
         [Fact]
         public void GetNcav()
         {
-            var ncav = parser.GetNcav(testFixture.BalanceSheet, "MSN");
+            var ncav = _parser.GetNcav(_testFixture.BalanceSheet, "MSN");
             Assert.Equal(1.61d, ncav);
         }
     }

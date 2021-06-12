@@ -15,11 +15,6 @@ namespace NcavScreener
             return Regex.Unescape(matches[0].Groups[1].Value);
         }
 
-        public void FindStocks(string context)
-        {
-
-        }
-
         public double GetNcav(string context, string ticker)
         {
             double result = double.NaN;
