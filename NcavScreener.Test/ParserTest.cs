@@ -1,7 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
 using Xunit;
 
 namespace NcavScreener.Test
 {
+    [ExcludeFromCodeCoverage]
     [Collection("Sample source collection")]
     public class ParserTest
     {
@@ -26,6 +28,10 @@ namespace NcavScreener.Test
         public void GetNcavInvalid()
         {
             var ncav = _parser.GetNcav(_testFixture.NullBalanceSheet, "MSN");
+            Assert.Equal(double.NaN, ncav);
+
+            // No shares outstanding
+            ncav = _parser.GetNcav(_testFixture.BalanceSheetNoOutstanding, "MSN");
             Assert.Equal(double.NaN, ncav);
         }
 

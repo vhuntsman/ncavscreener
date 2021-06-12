@@ -35,15 +35,9 @@ namespace NcavScreener
                     result = (currentAssets - totalLiabilities) / numCommonShares;
                     result = Math.Round(result, 2);
                 }
-                catch
-                {
-
-                }
+                catch { }
             }
-            catch
-            {
-
-            }
+            catch { }
             return result;
         }
     }
