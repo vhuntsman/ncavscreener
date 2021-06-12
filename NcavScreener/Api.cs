@@ -6,8 +6,7 @@ namespace NcavScreener
 {
     public class Api
     {
-        public string SessionCookie { get; private set; }
-        private string _sessionCookie;
+        private RestResponseCookie _sessionCookie = new RestResponseCookie() { Name = "foo", Value = "bar" };
         private RestRequest _request;
 
         public string GetAuthResponse(IRestClient client)
@@ -15,8 +14,11 @@ namespace NcavScreener
             client.Timeout = -1;
             _request = new RestRequest(Method.GET);
             IRestResponse response = client.Execute(_request);
-            SessionCookie = response?.Cookies[0]?.Name + "=" + response?.Cookies[0]?.Value;
-            _sessionCookie = response?.Cookies[0]?.Name + "=" + response?.Cookies[0]?.Value;
+            try
+            {
+                _sessionCookie = response?.Cookies?[0];
+            }
+            catch { }
             return response?.Content;
         }
 
@@ -25,7 +27,7 @@ namespace NcavScreener
             client.Timeout = -1;
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "text/plain");
-            request.AddHeader("Cookie", _sessionCookie);
+            request.AddCookie(_sessionCookie.Name, _sessionCookie.Value);
             var queryOffset = 0;
             var body = @"{""size"":250,""offset"":" + queryOffset + @",""sortField"":""intradayprice"",""sortType"":""asc"",""quoteType"":""EQUITY"",""topOperator"":""AND"",""query"":{""operator"":""AND"",""operands"":[{""operator"":""or"",""operands"":[{""operator"":""EQ"",""operands"":[""region"",""us""]},{""operator"":""EQ"",""operands"":[""region"",""hk""]},{""operator"":""EQ"",""operands"":[""region"",""sg""]},{""operator"":""EQ"",""operands"":[""region"",""ca""]},{""operator"":""EQ"",""operands"":[""region"",""au""]},{""operator"":""EQ"",""operands"":[""region"",""jp""]},{""operator"":""EQ"",""operands"":[""region"",""gb""]},{""operator"":""EQ"",""operands"":[""region"",""fr""]},{""operator"":""EQ"",""operands"":[""region"",""fr""]},{""operator"":""EQ"",""operands"":[""region"",""de""]},{""operator"":""EQ"",""operands"":[""region"",""ch""]},{""operator"":""EQ"",""operands"":[""region"",""nl""]},{""operator"":""EQ"",""operands"":[""region"",""be""]},{""operator"":""EQ"",""operands"":[""region"",""lu""]},{""operator"":""EQ"",""operands"":[""region"",""at""]},{""operator"":""EQ"",""operands"":[""region"",""cz""]},{""operator"":""EQ"",""operands"":[""region"",""fi""]},{""operator"":""EQ"",""operands"":[""region"",""hu""]},{""operator"":""EQ"",""operands"":[""region"",""pl""]},{""operator"":""EQ"",""operands"":[""region"",""ru""]},{""operator"":""EQ"",""operands"":[""region"",""gr""]},{""operator"":""EQ"",""operands"":[""region"",""it""]},{""operator"":""EQ"",""operands"":[""region"",""pt""]},{""operator"":""EQ"",""operands"":[""region"",""es""]}]},{""operator"":""lt"",""operands"":[""totaldebtequity.lasttwelvemonths"",25]},{""operator"":""or"",""operands"":[{""operator"":""EQ"",""operands"":[""sector"",""Consumer Defensive""]},{""operator"":""EQ"",""operands"":[""sector"",""Utilities""]},{""operator"":""EQ"",""operands"":[""sector"",""Technology""]},{""operator"":""EQ"",""operands"":[""sector"",""Consumer Cyclical""]},{""operator"":""EQ"",""operands"":[""sector"",""Communication Services""]},{""operator"":""EQ"",""operands"":[""sector"",""Healthcare""]},{""operator"":""EQ"",""operands"":[""sector"",""Industrials""]},{""operator"":""EQ"",""operands"":[""sector"",""Energy""]}]},{""operator"":""lt"",""operands"":[""lastclosepricebookvalue.lasttwelvemonths"",1]}]},""userId"":"""",""userIdType"":""guid""}";
             request.AddParameter("text/plain", body, ParameterType.RequestBody);
@@ -42,7 +44,10 @@ namespace NcavScreener
             {
                 request.Parameters.Clear();
                 request.AddHeader("Content-Type", "text/plain");
-                request.AddHeader("Cookie", _sessionCookie);
+                if (_sessionCookie != null)
+                {
+                    request.AddCookie(_sessionCookie.Name, _sessionCookie.Value);
+                }
                 body = @"{""size"":250,""offset"":" + queryOffset + @",""sortField"":""intradayprice"",""sortType"":""asc"",""quoteType"":""EQUITY"",""topOperator"":""AND"",""query"":{""operator"":""AND"",""operands"":[{""operator"":""or"",""operands"":[{""operator"":""EQ"",""operands"":[""region"",""us""]},{""operator"":""EQ"",""operands"":[""region"",""hk""]},{""operator"":""EQ"",""operands"":[""region"",""sg""]},{""operator"":""EQ"",""operands"":[""region"",""ca""]},{""operator"":""EQ"",""operands"":[""region"",""au""]},{""operator"":""EQ"",""operands"":[""region"",""jp""]},{""operator"":""EQ"",""operands"":[""region"",""gb""]},{""operator"":""EQ"",""operands"":[""region"",""fr""]},{""operator"":""EQ"",""operands"":[""region"",""fr""]},{""operator"":""EQ"",""operands"":[""region"",""de""]},{""operator"":""EQ"",""operands"":[""region"",""ch""]},{""operator"":""EQ"",""operands"":[""region"",""nl""]},{""operator"":""EQ"",""operands"":[""region"",""be""]},{""operator"":""EQ"",""operands"":[""region"",""lu""]},{""operator"":""EQ"",""operands"":[""region"",""at""]},{""operator"":""EQ"",""operands"":[""region"",""cz""]},{""operator"":""EQ"",""operands"":[""region"",""fi""]},{""operator"":""EQ"",""operands"":[""region"",""hu""]},{""operator"":""EQ"",""operands"":[""region"",""pl""]},{""operator"":""EQ"",""operands"":[""region"",""ru""]},{""operator"":""EQ"",""operands"":[""region"",""gr""]},{""operator"":""EQ"",""operands"":[""region"",""it""]},{""operator"":""EQ"",""operands"":[""region"",""pt""]},{""operator"":""EQ"",""operands"":[""region"",""es""]}]},{""operator"":""lt"",""operands"":[""totaldebtequity.lasttwelvemonths"",25]},{""operator"":""or"",""operands"":[{""operator"":""EQ"",""operands"":[""sector"",""Consumer Defensive""]},{""operator"":""EQ"",""operands"":[""sector"",""Utilities""]},{""operator"":""EQ"",""operands"":[""sector"",""Technology""]},{""operator"":""EQ"",""operands"":[""sector"",""Consumer Cyclical""]},{""operator"":""EQ"",""operands"":[""sector"",""Communication Services""]},{""operator"":""EQ"",""operands"":[""sector"",""Healthcare""]},{""operator"":""EQ"",""operands"":[""sector"",""Industrials""]},{""operator"":""EQ"",""operands"":[""sector"",""Energy""]}]},{""operator"":""lt"",""operands"":[""lastclosepricebookvalue.lasttwelvemonths"",1]}]},""userId"":"""",""userIdType"":""guid""}";
                 request.AddParameter("text/plain", body, ParameterType.RequestBody);
                 IRestResponse loopResponse = client.Execute(request);
@@ -60,7 +65,7 @@ namespace NcavScreener
         {
             client.Timeout = -1;
             var request = new RestRequest(Method.GET);
-            request.AddHeader("Cookie", _sessionCookie);
+            request.AddCookie(_sessionCookie.Name, _sessionCookie.Value);
             IRestResponse response = client.Execute(request);
             return response?.Content;
         }

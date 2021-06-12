@@ -28,6 +28,9 @@
     <None Update="BalanceSheet.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="BalanceSheetNoOutstanding.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="NullBalanceSheet.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
