@@ -1,4 +1,5 @@
-﻿using RestSharp;
+﻿using System.Threading.Tasks;
+using RestSharp;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -57,6 +58,9 @@ namespace NcavScreener
                     stockArray.Add(quote);
                 }
                 queryOffset += 250;
+
+                // Rate limit the get requests
+                Task.Delay(2000).GetAwaiter().GetResult();
             }
             return stockArray;
         }
