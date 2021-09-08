@@ -3,6 +3,8 @@ using RestSharp;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Diagnostics;
 
 namespace NcavScreener
 {
@@ -15,6 +17,9 @@ namespace NcavScreener
             var parser = new Parser();
             var api = new Api();
 
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+
             // Get the cookie and crumb
             var client = new RestClient("https://sg.finance.yahoo.com/screener/new");
             var crumb = parser.ExtractCrumb(api.GetAuthResponse(client));
@@ -24,35 +29,49 @@ namespace NcavScreener
             client = new RestClient(uri);
             JArray stockArray = api.GetStockList(client);
 
-            // List stocks that are Price < NCAV
-            foreach (var quote in stockArray)
+            using (StreamWriter writer = new StreamWriter($"output_{DateTime.Now.ToString("yyyy-MM-dd HHmmss")}.txt"))
             {
-                // Get the symbol 
-                string ticker = quote["symbol"].ToString();
-                client = new RestClient("https://sg.finance.yahoo.com/quote/" + ticker + "/balance-sheet?p=" + ticker);
-                var balanceSheet = api.GetStock(client);
-                var ncav = parser.GetNcav(balanceSheet, ticker);
-                var price = double.Parse(quote["regularMarketPrice"]["fmt"].ToString());
-                string longName = string.Empty;
-                try
+                // List stocks that are Price < NCAV
+                foreach (var quote in stockArray)
                 {
-                    longName = quote["longName"].ToString();
-                }
-                catch
-                {
-
-                }
-                var fullExchangeName = quote["fullExchangeName"];
-                if (!double.IsNaN(ncav) && (ncav > 0.0d))
-                {
-                    if (price < ncav)
+                    // Get the symbol 
+                    string ticker = quote["symbol"].ToString();
+                    client = new RestClient("https://sg.finance.yahoo.com/quote/" + ticker + "/balance-sheet?p=" + ticker);
+                    var balanceSheet = api.GetStock(client);
+                    var ncav = parser.GetNcav(balanceSheet, ticker);
+                    var price = double.Parse(quote["regularMarketPrice"]["fmt"].ToString());
+                    string longName = string.Empty;
+                    try
                     {
-                        Console.WriteLine(String.Format("{0, 7} | {1, 8} | {2, 8} | {3, 60} | {4, 10}", ticker, price, ncav, longName, fullExchangeName));
+                        longName = quote["longName"].ToString();
                     }
+                    catch
+                    {
+
+                    }
+                    var fullExchangeName = quote["fullExchangeName"];
+                    if (!double.IsNaN(ncav) && (ncav > 0.0d))
+                    {
+                        if (price < ncav)
+                        {
+                            writer.WriteLine(String.Format("{0, 7} | {1, 8} | {2, 8} | {3, 60} | {4, 10}", ticker, price, ncav, longName, fullExchangeName));
+                        }
+                    }
+                    // Rate limit the get requests
+                    Task.Delay(2000).GetAwaiter().GetResult();
                 }
-                // Rate limit the get requests
-                Task.Delay(1000).GetAwaiter().GetResult();
             }
+
+            stopWatch.Stop();
+            // Get the elapsed time as a TimeSpan value.
+            TimeSpan ts = stopWatch.Elapsed;
+
+            // Format and display the TimeSpan value.
+            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                ts.Hours, ts.Minutes, ts.Seconds,
+                ts.Milliseconds / 10);
+            Console.WriteLine("RunTime " + elapsedTime);
+
         }
     }
 }
