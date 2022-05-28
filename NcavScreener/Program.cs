@@ -27,6 +27,8 @@ namespace NcavScreener
             // Get the list of stocks
             var uri = "https://query1.finance.yahoo.com/v1/finance/screener?crumb=" + crumb + "&lang=en-SG&region=SG&formatted=true&corsDomain=sg.finance.yahoo.com";
             client = new RestClient(uri);
+            client.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36";
+
             JArray stockArray = api.GetStockList(client);
 
             using (StreamWriter writer = new StreamWriter($"output_{DateTime.Now.ToString("yyyy-MM-dd HHmmss")}.txt"))
@@ -45,9 +47,9 @@ namespace NcavScreener
                     {
                         longName = quote["longName"].ToString();
                     }
-                    catch
+                    catch (Exception e)
                     {
-
+                        Console.WriteLine(e);
                     }
                     var fullExchangeName = quote["fullExchangeName"];
                     if (!double.IsNaN(ncav) && (ncav > 0.0d))
