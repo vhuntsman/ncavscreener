@@ -27,18 +27,18 @@ namespace NcavScreener.Test
         [Fact]
         public void GetNcavInvalid()
         {
-            var ncav = _parser.GetNcav(_testFixture.NullBalanceSheet, "MSN");
+            var ncav = _parser.GetNcav(_testFixture.NullBalanceSheet, "MSN", 0);
             Assert.Equal(double.NaN, ncav);
 
-            // No shares outstanding
-            ncav = _parser.GetNcav(_testFixture.BalanceSheetNoOutstanding, "MSN");
+            // shares outstanding zero
+            ncav = _parser.GetNcav(_testFixture.BalanceSheetNoOutstanding, "MSN", 0);
             Assert.Equal(double.NaN, ncav);
         }
 
         [Fact]
         public void GetNcav()
         {
-            var ncav = _parser.GetNcav(_testFixture.BalanceSheet, "MSN");
+            var ncav = _parser.GetNcav(_testFixture.BalanceSheet, "MSN", 21042700);
             Assert.Equal(1.61d, ncav);
         }
     }
