@@ -40,7 +40,16 @@ namespace NcavScreener
                     string ticker = quote["symbol"].ToString();
                     client = new RestClient("https://sg.finance.yahoo.com/quote/" + ticker + "/balance-sheet?p=" + ticker);
                     var balanceSheet = api.GetStock(client);
-                    var sharesOutstanding = Convert.ToDouble(quote["sharesOutstanding"]["raw"]);
+                    double sharesOutstanding = double.NaN;
+                    try
+                    {
+                        sharesOutstanding = Convert.ToDouble(quote["sharesOutstanding"]["raw"]);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        continue;
+                    }
                     var ncav = parser.GetNcav(balanceSheet, ticker, sharesOutstanding);
                     var price = double.Parse(quote["regularMarketPrice"]["fmt"].ToString());
                     string longName = string.Empty;
